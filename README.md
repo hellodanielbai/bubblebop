@@ -10,41 +10,41 @@ ____________________________________________________________________________
 
 ### **Functionality & MVPs:**
 
-    - Player Controls: 
-        - Click on a plane and drag to create a flight path
-        - Re-clicking on a plane with an existing flight path will reset the flight path.
-    
-    - Game Objects:
-        - Plane spawns randomly and in faster rates as time progresses
-        - Follows flight path until the end, where it continues flying in a linear fashion
-        - Turns back 180˚ when plane reaches the edge of the screen
-        - Prompt GameOver screen when two planes crashes into each other
-        - Red planes: big size and slow speed
-        - Blue planes: medium size and medium speed
-        - Yellow planes: small size and fast speed
+- Player Controls: 
+    - Click on a plane and drag to create a flight path
+    - Re-clicking on a plane with an existing flight path will reset the flight path.
 
-    - Terminal
-        - Fixed locations with corresponding colors
-        - Planes can fly through terminals, but only land from one side
+- Game Objects:
+    - Plane spawns randomly and in faster rates as time progresses
+    - Follows flight path until the end, where it continues flying in a linear fashion
+    - Turns back 180˚ when plane reaches the edge of the screen
+    - Prompt GameOver screen when two planes crashes into each other
+    - Red planes: big size and slow speed
+    - Blue planes: medium size and medium speed
+    - Yellow planes: small size and fast speed
 
-    - Flight Path
-        - Path starts at player click, and ends when player is finished dragging
-        - Path’s color corresponds to it’s plane’s color
-        
-    - NavBar
-        - Game Title
-        - ScoreBoard
-        - Time
-    
-    - Settings & Instructions:
-        - Sound on/of for music & sound animations
-        - GameOver Screen
-        - README
+- Terminal
+    - Fixed locations with corresponding colors
+    - Planes can fly through terminals, but only land from one side
+
+- Flight Path
+    - Path starts at player click, and ends when player is finished dragging
+    - Path’s color corresponds to it’s plane’s color
+
+- NavBar
+    - Game Title
+    - ScoreBoard
+    - Time
+
+- Settings & Instructions:
+    - Sound on/of for music & sound animations
+    - GameOver Screen
+    - README
 ____________________________________________________________________________
 
 ### **Wireframes:**
 
-
+![wireframes](wireframes)
 ____________________________________________________________________________
 
 ### **Libraries and APIs:**
@@ -58,16 +58,16 @@ ____________________________________________________________________________
 
 ### **Implementation Timeline:** 
 
-12/30
+- 12/30
     - Backbone of the project
     - Initialize all the objects
-1/3
+- 1/3
     - Work on functionalities
-1/4
+- 1/4
     - Work on functionalities
-1/5
+- 1/5
     - Work on functionalities
-1/6
+- 1/6
     - Debug and make it look pretty
 
 ____________________________________________________________________________
