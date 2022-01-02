@@ -1,22 +1,16 @@
+import MovingObjects from "./movingObjects"
 
-export default class Plane {
-
-    constructor plane = {
-        x: 100,
-        y: 200,
-        size: 40,
-        dx: 5,
-        dy: 4
+export default class Plane extends MovingObjects {
+    constructor(hash, size, color) {
+        super(hash);
+        this.size = size;
+        this.color = color;
     };
 
-    drawCircle() {
+    drawPlane(ctx) {
         ctx.beginPath();
-        ctx.arc(circle.x, circle.y, circle.size, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = 'blue';
         ctx.fill();
-    }
-}
-
-
-
-
+    };
+};
