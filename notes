@@ -3,7 +3,6 @@ ctx.lineWidth = 5
 ctx.strokeStyle = "green";
 ctx.strokeRect(200, 200, 70, 150)
 
-
 //Path
 ctx.beginPath();
 ctx.moveTo(50, 50);
@@ -33,3 +32,38 @@ function drawCircle() {
     ctx.fill();
 }
 drawCircle();
+
+
+/////////
+
+const circle = {x: 300, y: 400, size: 30, dx: 2, dy: 4}
+
+function drawCircle() {
+    ctx.beginPath();
+    ctx.arc(circle.x, circle.y, circle.size, 0, Math.PI * 2)
+    ctx.fillStyle = "purple"
+    ctx.fill()
+}
+
+function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    drawCircle();
+
+    //change position
+    circle.x += circle.dx
+    circle.y += circle.dy
+
+    //detect wall
+    if (circle.x + circle.size > canvas.width || circle.x - circle.size < 0) {
+        circle.dx *= -1
+    }
+    if (circle.y + circle.size > canvas.height || circle.y - circle.size < 0) {
+        circle.dy *= -1
+    }
+
+    requestAnimationFrame(update)
+}
+
+update() 
+
