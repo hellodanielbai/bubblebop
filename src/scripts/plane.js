@@ -8,12 +8,14 @@ export default class Plane extends MovingObjects {
         this.color = color;
     };
 
-    drawPlane(ctx) {
+    draw(ctx) {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = 'blue';
         ctx.fill();
     };
+
+    
 
 
 }

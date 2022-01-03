@@ -1,3 +1,5 @@
+import Game from "./game"
+
 export default class GameView {
     
     constructor(ctx, game) {
@@ -5,18 +7,12 @@ export default class GameView {
         this.game = game
     }
 
-
-
     start() {
 
     }
 
-    animate(time) {
-
-    }
-
-    update(ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+    animate() {
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         this.drawPlane()
 
@@ -24,8 +20,7 @@ export default class GameView {
         
         this.clear()
 
-        this.detectWalls()
+        requestAnimationFrame(animate)
 
-        requestAnimationFrame(update)
     }
 }

@@ -7,7 +7,7 @@ export default class Terminal {
         this.color = hash["color"];
     };
 
-    drawTerminal(ctx) {
+    draw(ctx) {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     };

@@ -7,10 +7,6 @@ export default class MovingObjects {
         this.speed = hash["speed"]
     };
 
-    clear() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    };
-
     move() {
         this.x += this.dx;
         this.y += this.dy;
@@ -24,4 +20,5 @@ export default class MovingObjects {
             this.dy *= -1;
         };
     };
+
 };
