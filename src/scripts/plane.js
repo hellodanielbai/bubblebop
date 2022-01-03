@@ -1,8 +1,9 @@
 import MovingObjects from "./movingObjects"
 
 export default class Plane extends MovingObjects {
-    constructor(movingObjectHash, size, color) {
-        super(movingObjectHash);
+    
+    constructor(movingObjectOptions, size, color) {
+        super(movingObjectOptions);
         this.size = size;
         this.color = color;
     };
@@ -14,18 +15,5 @@ export default class Plane extends MovingObjects {
         ctx.fill();
     };
 
-    update(ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-        this.drawPlane()
-
-        this.move()
-        
-        this.clear()
-
-        this.detectWalls()
-
-        requestAnimationFrame(update)
-    }
 
 }
