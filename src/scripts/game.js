@@ -7,6 +7,9 @@ export default class Game {
         this.redTerminal = new Terminal({x: 760, y: 20, width: 30, height: 120, color: "red", xub: 800, xlb: 730, yub: 0, ylb: 170});
         this.blueTerminal = new Terminal({x: 760, y: 320, width: 30, height: 90, color: "blue", xub: 800, xlb: 730, yub: 290, ylb: 440});
         this.greenTerminal =  new Terminal({x: 760, y: 620, width: 30, height: 60, color: "green", xub: 800, xlb: 730, yub: 590, ylb: 710});
+        this.redPlane = new Plane({x: 150, y: 100, dx: 2, dy: 7, speed: 4, radius: 20, color: "red"});
+        this.bluePlane = new Plane({x: 150, y: 200, dx: 3, dy: 7, speed: 2, radius: 20, color: "blue"});
+        this.greenPlane = new Plane({x: 100, y: 70, dx: 2, dy: 3, speed: 1, radius: 20, color: "green"});
         this.planes = [];
         this.paths = [];
         this.score = 0;
@@ -15,10 +18,11 @@ export default class Game {
         this.GCOLOR =  "pink";
         this.GFPS = 30;
         this.gameOver = false;
+        this.cursorPosArr = []
+        
     };
 
     //Add Objects
-
     add(object) {
         if (object instanceof Terminal) {
             this.terminals.push(object);
@@ -31,37 +35,24 @@ export default class Game {
         };
     };
 
-    randomPosition() {
-        return [GDIM_X * Math.random(), GDIM_Y * Math.random()];
+    allObjects() {
+        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes);
     };
 
     addPlane() {
-        const redPlane = new Plane({x: 150, y: 100, dx: 2, dy: 7, speed: 0, radius: 30, color: "red"});
-        const bluePlane = new Plane({x: 150, y: 200, dx: 3, dy: 7, speed: 0, radius: 30, color: "blue"});
-        const greenPlane = new Plane({x: 100, y: 70, dx: 2, dy: 3, speed: 0, radius: 30, color: "green"});
-        this.planes.push(redPlane, greenPlane);
+        this.planes.push(this.redPlane);
     }
-
-    allObjects() {
-        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes, this.paths);
-    };
 
     removePlane(plane) {
         this.planes.splice(this.planes.indexOf(plane), 1);
     };
 
-    addPath() {
-
-    }
-
-    //Collision//
-
-    dist(pos1, pos2) {
-        return Math.sqrt(
-            Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2)
-        );
+    randomPosition() {
+        return [GDIM_X * Math.random(), GDIM_Y * Math.random()];
     };
 
+
+    //Collision//
     collisionBetween(object1, object2) {
         if (object2 instanceof Terminal) {
             if (object1.x > object2.xlb && (object1.y < object2.ylb) && (object1.y > object2.yub)) return true;
@@ -102,7 +93,6 @@ export default class Game {
     }
 
 
-
     //Draw Objects
     draw(ctx) {
         ctx.clearRect(0, 0, this.GDIM_X, this.GDIM_Y)
@@ -128,14 +118,26 @@ export default class Game {
         });
     };
 
+    // Controls
+    getCursorPos(event) {
+        const bounds = this.context[1].getBoundingClientRect();
+        const x = event.x - bounds.left;
+        const y = event.y - bounds.top;
+        let cursorPos = {x: x, y: y}
+        this.cursorPosArr.push(cursorPos)
+    }
+
+
+
+    //Run & End Game
+
     gameStart(ctx) {
         let drawInterval = setInterval(() => {
-            this.draw(ctx);
-            this.step();
             if (this.gameOver) {
                 clearInterval(drawInterval)
-                // window.blur()
             };
-        }, 10);
+            this.draw(ctx);
+            this.step();
+        }, 5);
     };
 } ;
