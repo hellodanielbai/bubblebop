@@ -6,7 +6,4 @@ import Game from "./scripts/game"
 
 const g = new Game()
 g.addPlane()
-g.addTerminal()
-
-// g.gameStart(ctx)
-
+g.gameStart(ctx)

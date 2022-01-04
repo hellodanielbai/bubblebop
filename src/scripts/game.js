@@ -3,9 +3,10 @@ import Plane from "./plane"
 import Path from "./path"
 
 export default class Game {
-
     constructor() {
-        this.terminals = [];
+        this.redTerminal = new Terminal({x: 760, y: 20, width: 30, height: 120, color: "red", xub: 800, xlb: 730, yub: 0, ylb: 170});
+        this.blueTerminal = new Terminal({x: 760, y: 320, width: 30, height: 90, color: "blue", xub: 800, xlb: 730, yub: 290, ylb: 440});
+        this.greenTerminal =  new Terminal({x: 760, y: 620, width: 30, height: 60, color: "green", xub: 800, xlb: 730, yub: 590, ylb: 710});
         this.planes = [];
         this.paths = [];
         this.score = 0;
@@ -34,26 +35,20 @@ export default class Game {
         return [GDIM_X * Math.random(), GDIM_Y * Math.random()];
     };
 
-    addTerminal() {
-        const redTerminal = new Terminal({x: 760, y: 20, width: 30, height: 120, color: "red"})
-        const blueTerminal = new Terminal({x: 760, y: 320, width: 30, height: 90, color: "blue"})
-        const greenTerminal = new Terminal({x: 760, y: 620, width: 30, height: 60, color: "green"})
-
-        this.terminals.push(greenTerminal, blueTerminal, redTerminal)
-    }
-
     addPlane() {
-        const redPlane = new Plane({x: 150, y: 100, dx: 2, dy: 7, speed: 0, radius: 30, color: "red"})
-        this.planes.push(redPlane)
+        const redPlane = new Plane({x: 150, y: 100, dx: 2, dy: 7, speed: 0, radius: 30, color: "red"});
+        const bluePlane = new Plane({x: 150, y: 200, dx: 3, dy: 7, speed: 0, radius: 30, color: "blue"});
+        const greenPlane = new Plane({x: 100, y: 70, dx: 2, dy: 3, speed: 0, radius: 30, color: "green"});
+        this.planes.push(redPlane, greenPlane);
     }
 
     allObjects() {
-        return [].concat(this.terminals, this.planes, this.paths);
-    }
+        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes, this.paths);
+    };
 
     removePlane(plane) {
         this.planes.splice(this.planes.indexOf(plane), 1);
-    }
+    };
 
     addPath() {
 
@@ -65,53 +60,47 @@ export default class Game {
         return Math.sqrt(
             Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2)
         );
-    }
+    };
 
-    isCollidedWith(object1, object2) {
+    collisionBetween(object1, object2) {
         if (object2 instanceof Terminal) {
-            const distX = Math.abs(object1.x - (object2.x - object2.width/2))
-            const distY = Math.abs(object1.y - (object2.y - object2.height/2))
-            if (distX <= (object2.width/2)) return true;  
-            if (distY <= (object2.height/2)) return true; 
-            const distX2 = distX - object2.width/2;
-            const distY2 = distY - object2.height/2;
-            return (distX2 * distX2 + distY2 * distY2 <= (object1.radius * object1.radius))
+            if (object1.x > object2.xlb && (object1.y < object2.ylb) && (object1.y > object2.yub)) return true;
         } else if (object2 instanceof Plane) {
-            const centerDistance = Math.sqrt(Math.pow((object1.x - object1.y, 2) + (Math.pow(object2.x - object2.y, 2))))
-            return centerDistance < (object1.radius + object2.radius)
-
-        }
-    }
+            let distSq = (object1.x - object2.x) * (object1.x - object2.x) + (object1.y - object2.y) * (object1.y - object2.y);
+            let radSumSq = (object1.radius + object2.radius) * (object1.radius + object2.radius);
+            if (distSq < radSumSq) {
+                this.gameOver = true
+            };
+        };
+    };
 
     checkPlaneCrash(plane) {
-        for (let i = 0; i < this.planes.length - 1; i++) {
-            if (this.planes.indexOf(plane) !== this.planes[i]) {
-                otherPlane = this.planes[i]
-                if (this.isCollidedWith(plane, otherPlane)) {
-                    const crash = plane.collideWith(otherPlane);
-                    if (crash) {return gameOver()}
-                }
-            }
+        for (let i = 0; i < this.planes.length; i++) {
+            if (this.planes.indexOf(plane) !== i) {
+                let otherPlane = this.planes[i]
+                if (this.collisionBetween(plane, otherPlane)) {
+                    this.gameOver = true;
+                };
+            };
+        };
+    };
+
+    checkPlaneLand(plane) {
+        let relevantTerminal;
+        if (plane.color === "red") {
+            relevantTerminal = this.redTerminal
+        } else if (plane.color === "green") {
+            relevantTerminal = this.greenTerminal
+        } else if (plane.color === "blue") {
+            relevantTerminal = this.blueTerminal
+        }
+        if (this.collisionBetween(plane, relevantTerminal)) {
+            this.removePlane(plane);
+            this.score += 1;
+            console.log(this.score);
         }
     }
 
-    checkPlaneLand(plane) {
-        for (let i = 0; i < this.terminals.length; i++) {
-            if (plane.color === this.terminals[i].color) {
-                var terminal = this.terminals[i]
-            }
-        }
-        if (terminal == null ) {
-            return;
-        }
-        if (this.isCollidedWith(plane, terminal)) {
-            console.log("hit")
-            this.gameOver = true;
-            console.log(this.gameOver)
-        } else {
-            return;
-        }
-    }
 
 
     //Draw Objects
@@ -119,37 +108,34 @@ export default class Game {
         ctx.clearRect(0, 0, this.GDIM_X, this.GDIM_Y)
         ctx.fillStyle = this.GCOLOR
         ctx.fillRect(0, 0, this.GDIM_X, this.GDIM_Y)
-
         this.allObjects().forEach(object => {
-            object.draw(ctx)
-        })
-    }
+            object.draw(ctx);
+        });
+    };
 
     move() {
         this.allObjects().forEach(object => {
-            object.move()
-        })
-    }
+            object.move();
+        });
+    };
 
     step() {
-        this.move()
+        this.move();
         this.planes.forEach((plane) => {
-            plane.detectWalls()
-            this.checkPlaneCrash(plane)
-            this.checkPlaneLand(plane)
-        })
-    }
+            plane.detectWalls();
+            this.checkPlaneLand(plane);
+            this.checkPlaneCrash(plane);
+        });
+    };
 
     gameStart(ctx) {
-        var drawInterval = setInterval(() => this.draw(ctx), 10)
-        var stepInterval = setInterval(() => this.step(), 10)
-
-        if (this.gameOver) {
-            clearInterval(drawInterval)
-            clearInterval(stepInterval)
-        }
-    }
-
-
-
-}
+        let drawInterval = setInterval(() => {
+            this.draw(ctx);
+            this.step();
+            if (this.gameOver) {
+                clearInterval(drawInterval)
+                // window.blur()
+            };
+        }, 10);
+    };
+} ;
