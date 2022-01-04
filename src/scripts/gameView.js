@@ -8,19 +8,18 @@ export default class GameView {
     }
 
     start() {
+        this.lastTime = 0
+        requestAnimationFrame(this.animate.bind(this))
+    }
+    
 
+    animate(time) {
+        const timeDelta = time - time.lastTime
+        this.game.step(timeDelta)
+        this.game.draw(this.ctx)
+        this.lastTime = time
+
+        requestAnimationFrame(this.animate.bind(this))
     }
 
-    animate() {
-        this.ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-        this.drawPlane()
-
-        this.move()
-        
-        this.clear()
-
-        requestAnimationFrame(animate)
-
-    }
 }
