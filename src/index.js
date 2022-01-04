@@ -8,6 +8,5 @@ const g = new Game()
 g.addPlane()
 g.addTerminal()
 
-setInterval(() => g.draw(ctx), 5)
-setInterval(() => g.step(), 5)
+// g.gameStart(ctx)
 

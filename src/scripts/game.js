@@ -13,6 +13,7 @@ export default class Game {
         this.GDIM_Y = 800;
         this.GCOLOR =  "pink";
         this.GFPS = 30;
+        this.gameOver = false;
     };
 
     //Add Objects
@@ -38,7 +39,7 @@ export default class Game {
         const blueTerminal = new Terminal({x: 760, y: 320, width: 30, height: 90, color: "blue"})
         const greenTerminal = new Terminal({x: 760, y: 620, width: 30, height: 60, color: "green"})
 
-        this.terminals.push(redTerminal, blueTerminal, greenTerminal)
+        this.terminals.push(greenTerminal, blueTerminal, redTerminal)
     }
 
     addPlane() {
@@ -82,36 +83,38 @@ export default class Game {
         }
     }
 
-    checkPlaneCrash() {
+    checkPlaneCrash(plane) {
         for (let i = 0; i < this.planes.length - 1; i++) {
-            for (let j = i + 1; j < this.planes.length; j++) {
-                const plane1 = this.planes[i];
-                const plane2 = this.planes[j];
-                if (this.isCollidedWith(plane1, plane2)) {
-                    const crash = plane1.collideWith(plane2);
-                    if (crash) {
-                        return gameOver()
-                    }
+            if (this.planes.indexOf(plane) !== this.planes[i]) {
+                otherPlane = this.planes[i]
+                if (this.isCollidedWith(plane, otherPlane)) {
+                    const crash = plane.collideWith(otherPlane);
+                    if (crash) {return gameOver()}
                 }
             }
         }
     }
 
-    checkPlaneLand() {
-        for (let i = 0; i < this.planes.length; i++) {
-            for (let j = 0; j < this.terminals.length; j++) {
-                const plane = this.planes[i];
-                const terminal = this.terminals[j];
-                if (this.isCollidedWith(plane, terminal) && Object.values(terminal).includes(plane.color)) {
-                    this.removePlane(plane)
-                    this.score += 1
-                }
+    checkPlaneLand(plane) {
+        for (let i = 0; i < this.terminals.length; i++) {
+            if (plane.color === this.terminals[i].color) {
+                var terminal = this.terminals[i]
             }
         }
+        if (terminal == null ) {
+            return;
+        }
+        if (this.isCollidedWith(plane, terminal)) {
+            console.log("hit")
+            this.gameOver = true;
+            console.log(this.gameOver)
+        } else {
+            return;
+        }
     }
+
 
     //Draw Objects
-
     draw(ctx) {
         ctx.clearRect(0, 0, this.GDIM_X, this.GDIM_Y)
         ctx.fillStyle = this.GCOLOR
@@ -132,14 +135,21 @@ export default class Game {
         this.move()
         this.planes.forEach((plane) => {
             plane.detectWalls()
+            this.checkPlaneCrash(plane)
+            this.checkPlaneLand(plane)
         })
-        this.checkPlaneCrash()
-        this.checkPlaneLand()
+    }
+
+    gameStart(ctx) {
+        var drawInterval = setInterval(() => this.draw(ctx), 10)
+        var stepInterval = setInterval(() => this.step(), 10)
+
+        if (this.gameOver) {
+            clearInterval(drawInterval)
+            clearInterval(stepInterval)
+        }
     }
 
 
-    gameOver() {
-        
-    }
 
 }

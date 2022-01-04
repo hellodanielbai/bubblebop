@@ -25,8 +25,6 @@ export default class Plane {
         };
     };
 
- 
-
     move() {
         this.x += this.dx;
         this.y += this.dy;
@@ -38,5 +36,4 @@ export default class Plane {
         ctx.fillStyle = this.color;
         ctx.fill();
     };
-
 };

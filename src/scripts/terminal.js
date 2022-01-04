@@ -13,7 +13,7 @@ export default class Terminal {
     };
 
     move() {
-        
-    }
+        // terminals don't move
+    };
 
 };
