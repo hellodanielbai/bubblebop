@@ -5,10 +5,10 @@ export default class Terminal {
         this.width = hash["width"];
         this.height = hash["height"];
         this.color = hash["color"];
-        this.xub = hash["xub"];
-        this.xlb = hash["xlb"];
-        this.yub = hash["yub"];
-        this.ylb = hash["ylb"];
+        this.xub = hash["xl"];
+        this.xlb = hash["xr"];
+        this.yub = hash["yu"];
+        this.ylb = hash["yd"];
     };
 
     draw(ctx) {
