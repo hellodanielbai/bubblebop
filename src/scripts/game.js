@@ -2,43 +2,38 @@ import Terminal from "./terminal"
 import Plane from "./plane"
 import Path from "./path"
 
+const canvas = document.getElementById('canvas');
+
 export default class Game {
     constructor() {
-        this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red"});
-        this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue"});
-        this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green"});
-        this.redPlane = new Plane({x: 30, y: 30, dx: 0.5, dy: 1.5, radius: 30, color: "red"});
-        this.planesQueue = [this.redPlane];
-        this.planes = [];
-        this.paths = [];
-        this.score = 0;
         this.GDIM_X = 800;
         this.GDIM_Y = 800;
         this.GCOLOR =  "pink";
         this.GFPS = 30;
+        this.score = 0;
         this.gameOver = false;
         this.counter = 0;
         this.incrementer = 0;
+        this.cursorPosArr = [];    
 
-        this.cursorPosArr = [];
+        this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red"});
+        this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue"});
+        this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green"});
+
+        this.redPlane = new Plane({x: 30, y: 30, dx: 0.5, dy: 1.5, radius: 30, color: "red"});
+        this.planesQueue = [this.redPlane];
+        this.planes = [];
+
+        this.testPath = new Path({x: 400, y: 400, width: 40, height: 40, color: "gray"})
+        this.paths = [this.testPath];
+        this.pathLife = 400;
     };
 
     //Add Objects
     allObjects() {
-        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes);
+        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes, this.paths);
     };
 
-    add(object) {
-        if (object instanceof Terminal) {
-            this.terminals.push(object);
-        };
-        if (object instanceof Plane) {
-            this.planes.push(object);
-        };
-        if (object instanceof Path) {
-            this.paths.push(object);
-        };
-    };
 
     addRandomPlaneToQueue() {
         let redSpeed = 2;
@@ -48,17 +43,17 @@ export default class Game {
         if (randColor === 0) {
             const randDX = Math.random() * redSpeed;
             const randDY = redSpeed - randDX;
-            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 30, color: "red"});
+            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 30, color: "red"});
             this.planesQueue.push(randomPlane);
         } else if (randColor === 1) {
             const randDX = Math.random() * blueSpeed;
             const randDY = blueSpeed - randDX;
-            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 20, color: "blue"});
+            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 20, color: "blue"});
             this.planesQueue.push(randomPlane);
         } else {
             const randDX = Math.random() * greenSpeed;
             const randDY = greenSpeed - randDX;
-            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 10, color: "green"});
+            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 10, color: "green"});
             this.planesQueue.push(randomPlane);
         };
     };
@@ -68,7 +63,7 @@ export default class Game {
             this.planes.push(this.planesQueue.shift());
             this.addRandomPlaneToQueue();
             this.counter = 400 - this.incrementer;
-            // if (this.incrementer < 400) this.incrementer += 2;
+            // if (this.incrementer < 200) this.incrementer += 2;
         } else {
             this.counter--;
         };  
@@ -78,9 +73,29 @@ export default class Game {
         this.planes.splice(this.planes.indexOf(plane), 1);
     };
 
+    addPath(newPath) {
+        if (newPath.x != this.paths[0].x && newPath.y != this.paths[0].y){
+            this.paths.unshift(newPath);
+        };
+    };
+
+    removePath() {
+        this.paths.pop();
+    };
+
     //Collision//
     collisionBetween(object1, object2) {
         if (object2 instanceof Terminal) {
+            var distX = Math.abs(object1.x - object2.x - object2.width/2);
+            var distY = Math.abs(object1.y - object2.y - object2.height/2);
+            if (distX > (object2.width/2 + object1.radius)) { return false; }
+            if (distY > (object2.height/2 + object1.radius)) { return false; }
+            if (distX <= (object2.width/2)) { return true; } 
+            if (distY <= (object2.height/2)) { return true; }
+            var objdx = distX - object2.width/2;
+            var objdy = distY - object2.height/2;
+            return (objdx * objdx + objdy * objdy <= (object1.radius * object1.radius));
+        } else if (object2 instanceof Path) {
             var distX = Math.abs(object1.x - object2.x - object2.width/2);
             var distY = Math.abs(object1.y - object2.y - object2.height/2);
             if (distX > (object2.width/2 + object1.radius)) { return false; }
@@ -99,17 +114,6 @@ export default class Game {
         };
     };
 
-    checkPlaneCrash(plane) {
-        for (let i = 1; i < this.planes.length; i++) {
-            if (this.planes.indexOf(plane) !== i) {
-                let otherPlane = this.planes[i];
-                if (this.collisionBetween(plane, otherPlane)) {
-                    this.gameOver = true;
-                };
-            };
-        };
-    };
-
     checkPlaneLand(plane) {
         let relevantTerminal;
         if (plane.color === "red") {
@@ -118,12 +122,33 @@ export default class Game {
             relevantTerminal = this.greenTerminal;
         } else if (plane.color === "blue") {
             relevantTerminal = this.blueTerminal;
-        }
+        };
         if (this.collisionBetween(plane, relevantTerminal)) {
             this.removePlane(plane);
             this.score ++;
             let scoremarker = document.getElementById("scoremarker");
             scoremarker.innerHTML = `Score: ${this.score}`;
+        };
+    };
+
+    checkPlaneReRoute(plane) {
+        for(let i = 0; i < this.paths.length; i++) {
+            let currPath = this.paths[i]
+            if (this.collisionBetween(plane, currPath)) {
+                plane.dx *= -1
+                plane.dy *= -1
+            }
+        };
+    };
+
+    checkPlaneCrash(plane) {
+        for (let i = 1; i < this.planes.length; i++) {
+            if (this.planes.indexOf(plane) !== i) {
+                let otherPlane = this.planes[i];
+                if (this.collisionBetween(plane, otherPlane)) {
+                    this.gameOver = true;
+                };
+            };
         };
     };
 
@@ -136,11 +161,19 @@ export default class Game {
             this.cursorPosArr.push(cursorPos);
         };
 
+
     //Run Game
     draw(ctx) {
         ctx.clearRect(0, 0, this.GDIM_X, this.GDIM_Y);
         ctx.fillStyle = this.GCOLOR;
         ctx.fillRect(0, 0, this.GDIM_X, this.GDIM_Y);
+        canvas.addEventListener("click", (event) => {
+            const newPath = new Path({x: event.offsetX, y: event.offsetY, width: 40, height: 40, color: "gray"})
+            this.addPath(newPath)
+            if (this.paths.length > 4) {
+                this.removePath();
+            };
+        });
         this.allObjects().forEach(object => {
             object.draw(ctx);
         });
@@ -154,10 +187,17 @@ export default class Game {
 
     step() {
         this.addPlane()
+        if (this.pathLife === 0) {
+            this.removePath()
+            this.pathLife = 400
+        } else {
+            this.pathLife--;
+        };
         this.move();
         this.planes.forEach((plane) => {
-            plane.detectWalls();
+            plane.detectBorder();
             this.checkPlaneLand(plane);
+            this.checkPlaneReRoute(plane);
             // this.checkPlaneCrash(plane);
         });
     };

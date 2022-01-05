@@ -1,10 +1,10 @@
 export default class Terminal {
-    constructor(hash) {
-        this.x = hash["x"];
-        this.y = hash["y"];
-        this.width = hash["width"];
-        this.height = hash["height"];
-        this.color = hash["color"];
+    constructor(options) {
+        this.x = options["x"];
+        this.y = options["y"];
+        this.width = options["width"];
+        this.height = options["height"];
+        this.color = options["color"];
     };
 
     draw(ctx) {

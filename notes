@@ -19,11 +19,9 @@ ctx.beginPath()
 ctx.arc(200, 200, 40, 0, Math.PI * 2)
 ctx.fill();
 
-
 ctx.moveTo(x, y)
 quadraticCurveTo(cp1x, cp1y, endX, endY)
 bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY)
-
 
 const circle = {x: 300, y: 400, size: 30, dx: 2, dy: 4}
 
@@ -35,33 +33,7 @@ function drawCircle() {
 }
 
 
- <nav id='navbar'>
-        <span>Time</span>
-        <span>Score</span>
-    </nav>
-
-    import Game from "./game"
-
-export default class GameView {
-    
-    constructor(ctx, game) {
-        this.ctx = ctx
-        this.game = game
-    }
-
-    start() {
-        this.lastTime = 0
-        requestAnimationFrame(this.animate.bind(this))
-    }
-
-
-    animate(time) {
-        const timeDelta = time - time.lastTime
-        this.game.step(timeDelta)
-        this.game.draw(this.ctx)
-        this.lastTime = time
-
-        requestAnimationFrame(this.animate.bind(this))
-    }
-
-}
+<nav id='navbar'>
+    <span>Time</span>
+    <span>Score</span>
+</nav>

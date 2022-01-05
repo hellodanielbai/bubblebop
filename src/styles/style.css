@@ -1,11 +1,12 @@
 h1 {
-    color: blue;
+    color: black;
+    text-align: center;
 
 }
 
 body {
-    background-color: gray;
-    color: blue;
+    background-color: lightgray;
+    color: black;
     display: flex;
     flex-direction: column;
     align-items: center;
