@@ -5,8 +5,9 @@ import Game from "./scripts/game"
 
 document.addEventListener("DOMContentLoaded", () => {
     const g = new Game()
-    g.addPlane()
+    // g.addPlane()
     g.gameStart(ctx)
+
 
     canvas.addEventListener("click", e => {
         console.log("hi")

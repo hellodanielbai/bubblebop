@@ -5,7 +5,6 @@ export default class Plane {
         this.y = options["y"];
         this.dx = options["dx"];
         this.dy = options["dy"];
-        this.speed = options["speed"]
         this.radius = options["radius"]
         this.color = options["color"];
     };

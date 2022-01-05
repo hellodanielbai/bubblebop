@@ -4,12 +4,11 @@ import Path from "./path"
 
 export default class Game {
     constructor() {
-        this.redTerminal = new Terminal({x: 760, y: 20, width: 30, height: 120, color: "red", xub: 800, xlb: 730, yub: 0, ylb: 170});
-        this.blueTerminal = new Terminal({x: 760, y: 320, width: 30, height: 90, color: "blue", xub: 800, xlb: 730, yub: 290, ylb: 440});
-        this.greenTerminal =  new Terminal({x: 760, y: 620, width: 30, height: 60, color: "green", xub: 800, xlb: 730, yub: 590, ylb: 710});
-        this.redPlane = new Plane({x: 150, y: 100, dx: 2, dy: 7, speed: 4, radius: 20, color: "red"});
-        this.bluePlane = new Plane({x: 150, y: 200, dx: 3, dy: 7, speed: 2, radius: 20, color: "blue"});
-        this.greenPlane = new Plane({x: 100, y: 70, dx: 2, dy: 3, speed: 1, radius: 20, color: "green"});
+        this.redTerminal = new Terminal({x: 760, y: 20, width: 40, height: 200, color: "red", xub: 800, xlb: 730, yub: 0, ylb: 170});
+        this.blueTerminal = new Terminal({x: 760, y: 320, width: 40, height: 90, color: "blue", xub: 800, xlb: 730, yub: 290, ylb: 440});
+        this.greenTerminal =  new Terminal({x: 760, y: 620, width: 40, height: 60, color: "green", xub: 800, xlb: 730, yub: 590, ylb: 710});
+        this.redPlane = new Plane({x: 30, y: 30, dx: 0.5, dy: 1.5, speed: 4, radius: 20, color: "red"});
+        this.planesQueue = [this.redPlane]
         this.planes = [];
         this.paths = [];
         this.score = 0;
@@ -19,10 +18,15 @@ export default class Game {
         this.GFPS = 30;
         this.gameOver = false;
         this.cursorPosArr = []
-        
+
+        this.counter = 0
     };
 
     //Add Objects
+    allObjects() {
+        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes);
+    };
+
     add(object) {
         if (object instanceof Terminal) {
             this.terminals.push(object);
@@ -35,13 +39,40 @@ export default class Game {
         };
     };
 
-    allObjects() {
-        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes);
-    };
+    addRandomPlaneToQueue() {
+        let redSpeed = 2
+        let blueSpeed = 3
+        let greenSpeed = 5
+        let randColor = Math.floor(Math.random() * 3)
+        if (randColor === 0) {
+            const randDX = Math.random() * redSpeed
+            const randDY = redSpeed - randDX
+            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 20, color: "red"});
+            this.planesQueue.push(randomPlane)
+        } else if (randColor === 1) {
+            const randDX = Math.random() * blueSpeed
+            const randDY = blueSpeed - randDX
+            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 20, color: "blue"});
+            this.planesQueue.push(randomPlane)
+        } else {
+            const randDX = Math.random() * greenSpeed
+            const randDY = greenSpeed - randDX
+            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 20, color: "green"});
+            this.planesQueue.push(randomPlane)
+        }
+    }
 
     addPlane() {
-        this.planes.push(this.redPlane);
+        if (this.counter === 0) {
+            this.planes.push(this.planesQueue.shift());
+            // this.addPlaneToQueue()
+            this.addRandomPlaneToQueue()
+            this.counter = 200
+        } else {
+            this.counter--
+        }     
     }
+
 
     removePlane(plane) {
         this.planes.splice(this.planes.indexOf(plane), 1);
@@ -66,7 +97,7 @@ export default class Game {
     };
 
     checkPlaneCrash(plane) {
-        for (let i = 0; i < this.planes.length; i++) {
+        for (let i = 1; i < this.planes.length; i++) {
             if (this.planes.indexOf(plane) !== i) {
                 let otherPlane = this.planes[i]
                 if (this.collisionBetween(plane, otherPlane)) {
@@ -88,6 +119,8 @@ export default class Game {
         if (this.collisionBetween(plane, relevantTerminal)) {
             this.removePlane(plane);
             this.score += 1;
+            let scoremarker = document.getElementById("scoremarker")
+            scoremarker.innerHTML = `Score: ${this.score}`
             console.log(this.score);
         }
     }
@@ -110,11 +143,12 @@ export default class Game {
     };
 
     step() {
+        this.addPlane()
         this.move();
         this.planes.forEach((plane) => {
             plane.detectWalls();
             this.checkPlaneLand(plane);
-            this.checkPlaneCrash(plane);
+            // this.checkPlaneCrash(plane);
         });
     };
 
@@ -128,9 +162,7 @@ export default class Game {
     }
 
 
-
     //Run & End Game
-
     gameStart(ctx) {
         let drawInterval = setInterval(() => {
             if (this.gameOver) {
@@ -138,6 +170,6 @@ export default class Game {
             };
             this.draw(ctx);
             this.step();
-        }, 5);
+        }, 20);
     };
 } ;
