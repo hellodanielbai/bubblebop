@@ -3,16 +3,15 @@
 ### **Background:**
 
 Flight Plan is a marathon game where the objective is to land as many planes to their respective terminals. There are three colored planes (red, blue, yellow) and three corresponding colored terminals. 
-While the planes will randomly spawn from any side of the screen, the terminals remain in fixed locations.
-
-The player can create a flight path for each respective plane by clicking on the plane and dragging, which creates a line. As the game progresses, planes will spawn at faster rates. Once a plane crashes into another plane, the game is over.
+The planes will spawn from the top left corner at varying directions, but with their respective speeds. Terminals, on the other hand will appear on the right side of the screen as fixed locations.
+The player can direct the plane by clicking on the screen, which creates a path. Players can manipulate the planes' trajectories by making it bounce off the path into the terminals. As the game progresses, planes will spawn at faster rates. Once a plane crashes into another plane, the game is over.
 ____________________________________________________________________________
 
 ### **Functionality & MVPs:**
 
 - Player Controls: 
-    - Click on a plane and drag to create a flight path
-    - Re-clicking on a plane with an existing flight path will reset the flight path.
+    - Click on the screen and create paths (up to 4 paths at a time)
+    - Paths automatically disappear after a set amount of time
 
 - Game Objects:
     - Plane spawns randomly and in faster rates as time progresses
@@ -25,7 +24,7 @@ ____________________________________________________________________________
 
 - Terminal
     - Fixed locations with corresponding colors
-    - Planes can fly through terminals, but only land from one side
+    - Planes can only score when the reach their respective terminals
 
 - Flight Path
     - Path starts at player click, and ends when player is finished dragging
@@ -34,7 +33,6 @@ ____________________________________________________________________________
 - NavBar
     - Game Title
     - ScoreBoard
-    - Time
 
 - Settings & Instructions:
     - Sound on/of for music & sound animations

@@ -1,8 +1,8 @@
+const canvas = document.getElementById('canvas');
+
 import Terminal from "./terminal"
 import Plane from "./plane"
 import Path from "./path"
-
-const canvas = document.getElementById('canvas');
 
 export default class Game {
     constructor() {
@@ -24,16 +24,14 @@ export default class Game {
         this.planesQueue = [this.redPlane];
         this.planes = [];
 
-        this.testPath = new Path({x: 400, y: 400, width: 40, height: 40, color: "gray"})
-        this.paths = [this.testPath];
-        this.pathLife = 400;
+        this.paths = [];
+        this.pathLife = 300;
     };
 
     //Add Objects
     allObjects() {
         return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes, this.paths);
     };
-
 
     addRandomPlaneToQueue() {
         let redSpeed = 2;
@@ -74,9 +72,13 @@ export default class Game {
     };
 
     addPath(newPath) {
-        if (newPath.x != this.paths[0].x && newPath.y != this.paths[0].y){
-            this.paths.unshift(newPath);
-        };
+        if (this.planes.every(plane => !this.collisionBetween(plane, newPath))) {
+            if (this.paths.length === 0) {
+                this.paths.unshift(newPath)
+            } else if (newPath.x != this.paths[0].x && newPath.y != this.paths[0].y){
+                this.paths.unshift(newPath);
+            };
+        }
     };
 
     removePath() {
@@ -114,6 +116,16 @@ export default class Game {
         };
     };
 
+    planeReRoute(plane) {
+        for(let i = 0; i < this.paths.length; i++) {
+            let currPath = this.paths[i]
+            if (this.collisionBetween(plane, currPath)) {
+                plane.dx *= -1
+                plane.dy *= -1
+            }
+        };
+    };
+
     checkPlaneLand(plane) {
         let relevantTerminal;
         if (plane.color === "red") {
@@ -131,16 +143,6 @@ export default class Game {
         };
     };
 
-    checkPlaneReRoute(plane) {
-        for(let i = 0; i < this.paths.length; i++) {
-            let currPath = this.paths[i]
-            if (this.collisionBetween(plane, currPath)) {
-                plane.dx *= -1
-                plane.dy *= -1
-            }
-        };
-    };
-
     checkPlaneCrash(plane) {
         for (let i = 1; i < this.planes.length; i++) {
             if (this.planes.indexOf(plane) !== i) {
@@ -151,16 +153,6 @@ export default class Game {
             };
         };
     };
-
-        // Controls
-        getCursorPos(event) {
-            const bounds = this.context[1].getBoundingClientRect();
-            const x = event.x - bounds.left;
-            const y = event.y - bounds.top;
-            let cursorPos = {x: x, y: y};
-            this.cursorPosArr.push(cursorPos);
-        };
-
 
     //Run Game
     draw(ctx) {
@@ -189,7 +181,7 @@ export default class Game {
         this.addPlane()
         if (this.pathLife === 0) {
             this.removePath()
-            this.pathLife = 400
+            this.pathLife = 600
         } else {
             this.pathLife--;
         };
@@ -197,12 +189,12 @@ export default class Game {
         this.planes.forEach((plane) => {
             plane.detectBorder();
             this.checkPlaneLand(plane);
-            this.checkPlaneReRoute(plane);
+            this.planeReRoute(plane);
             // this.checkPlaneCrash(plane);
         });
     };
 
-    gameStart(ctx) {
+    animate(ctx) {
         let drawInterval = setInterval(() => {
             if (this.gameOver) {
                 clearInterval(drawInterval)
