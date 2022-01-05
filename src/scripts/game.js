@@ -4,9 +4,9 @@ import Path from "./path"
 
 export default class Game {
     constructor() {
-        this.redTerminal = new Terminal({x: 760, y: 20, width: 40, height: 200, color: "red", xub: 800, xlb: 730, yub: 0, ylb: 170});
-        this.blueTerminal = new Terminal({x: 760, y: 320, width: 40, height: 90, color: "blue", xub: 800, xlb: 730, yub: 290, ylb: 440});
-        this.greenTerminal =  new Terminal({x: 760, y: 620, width: 40, height: 60, color: "green", xub: 800, xlb: 730, yub: 590, ylb: 710});
+        this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red", xub: 800, xlb: 780, yub: 20, ylb: 260});
+        this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue", xub: 800, xlb: 780, yub: 280, ylb: 520});
+        this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green", xub: 800, xlb: 780, yub: 540, ylb: 780});
         this.redPlane = new Plane({x: 30, y: 30, dx: 0.5, dy: 1.5, speed: 4, radius: 20, color: "red"});
         this.planesQueue = [this.redPlane]
         this.planes = [];
@@ -170,6 +170,6 @@ export default class Game {
             };
             this.draw(ctx);
             this.step();
-        }, 20);
+        }, 5);
     };
 } ;
