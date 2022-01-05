@@ -4,10 +4,10 @@ import Path from "./path"
 
 export default class Game {
     constructor() {
-        this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red", xl: 780, xr: 800, yu: 20, yd: 260});
-        this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue", xl: 780, xr: 800, yu: 280, yd: 520});
-        this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green", xl: 780, xr: 800, yu: 540, yd: 780});
-        this.redPlane = new Plane({x: 30, y: 30, dx: 0.5, dy: 1.5, speed: 4, radius: 20, color: "red"});
+        this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red"});
+        this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue"});
+        this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green"});
+        this.redPlane = new Plane({x: 30, y: 30, dx: 0.5, dy: 1.5, radius: 30, color: "red"});
         this.planesQueue = [this.redPlane];
         this.planes = [];
         this.paths = [];
@@ -17,9 +17,10 @@ export default class Game {
         this.GCOLOR =  "pink";
         this.GFPS = 30;
         this.gameOver = false;
-        this.cursorPosArr = [];
         this.counter = 0;
         this.incrementer = 0;
+
+        this.cursorPosArr = [];
     };
 
     //Add Objects
@@ -47,7 +48,7 @@ export default class Game {
         if (randColor === 0) {
             const randDX = Math.random() * redSpeed;
             const randDY = redSpeed - randDX;
-            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 20, color: "red"});
+            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 30, color: "red"});
             this.planesQueue.push(randomPlane);
         } else if (randColor === 1) {
             const randDX = Math.random() * blueSpeed;
@@ -57,7 +58,7 @@ export default class Game {
         } else {
             const randDX = Math.random() * greenSpeed;
             const randDY = greenSpeed - randDX;
-            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 20, color: "green"});
+            const randomPlane = new Plane({x: 30, y: 30, dx: randDX, dy: randDY, radius: 10, color: "green"});
             this.planesQueue.push(randomPlane);
         };
     };
@@ -66,18 +67,16 @@ export default class Game {
         if (this.counter === 0) {
             this.planes.push(this.planesQueue.shift());
             this.addRandomPlaneToQueue();
-            this.counter = 200 - this.incrementer;
-            // if (this.incrementer < 200) this.incrementer++
+            this.counter = 400 - this.incrementer;
+            // if (this.incrementer < 400) this.incrementer += 2;
         } else {
             this.counter--;
         };  
     };
 
-
     removePlane(plane) {
         this.planes.splice(this.planes.indexOf(plane), 1);
     };
-
 
     //Collision//
     collisionBetween(object1, object2) {

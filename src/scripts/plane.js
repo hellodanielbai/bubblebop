@@ -1,5 +1,4 @@
 export default class Plane {
-    
     constructor(options) {
         this.x = options["x"];
         this.y = options["y"];
