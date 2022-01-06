@@ -121,9 +121,9 @@ export default class Game {
             let currPath = this.paths[i]
             if (this.collisionBetween(plane, currPath)) {
                 if (plane.x > currPath.x || plane.x < currPath.x) {
-                    plane.dy += 1
+                    plane.dy *=  -1
                 } else if (plane.y > currPath.y || (plane.y < currPath.y)) {
-                    plane.dx -= 1
+                    plane.dx *= -1
                 }
             }
         };
@@ -205,6 +205,6 @@ export default class Game {
             };
             this.draw(ctx);
             this.step();
-        }, 16);
+        }, 12);
     };
 } ;
