@@ -2,9 +2,9 @@
 
 ### **Background:**
 
-Bubble Bop is a marathon game where the objective is to land as many planes to their respective terminals. There are three colored planes (red, blue, yellow) and three corresponding colored terminals. 
-The planes will spawn from the top left corner at varying directions, but with their respective speeds. Terminals, on the other hand will appear on the right side of the screen as fixed locations.
-The player can direct the plane by clicking on the screen, which creates a path. Players can manipulate the planes' trajectories by making it bounce off the path into the terminals. As the game progresses, planes will spawn at faster rates. Once a plane crashes into another plane, the game is over.
+Bubble Bop is a marathon game where the objective is to land as many balls to their respective terminals. There are three colored balls (red, blue, yellow) and three corresponding colored terminals. 
+The balls will spawn from the top left corner at varying directions, but with their respective speeds. Terminals, on the other hand will appear on the right side of the screen as fixed locations.
+The player can direct the ball by clicking on the screen, which creates a path. Players can manipulate the balls' trajectories by making it bounce off the path into the terminals. As the game progresses, balls will spawn at faster rates. Once a ball crashes into another ball, the game is over.
 ____________________________________________________________________________
 
 ### **Functionality & MVPs:**
@@ -14,7 +14,7 @@ ____________________________________________________________________________
     - Paths automatically disappear after a set amount of time
 
 - Game Objects:
-    - Ball spawns randomly and in faster rates as time progresses
+    - Ball spawns randomly and in faster rates as you score
     - Follows ball path until the end, where it continues move in a linear fashion
     - Turns back 180˚ when ball reaches the edge of the screen
     - Prompt GameOver screen when two balls crashes into each other
