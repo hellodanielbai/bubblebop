@@ -194,7 +194,7 @@ export default class Game {
         if (this.gameOver) {
             ctx.font = '80px impact';
             ctx.fillText('GAMEOVER', 220, 360);
-        } 
+        };
     };
 
     move() {
@@ -225,4 +225,10 @@ export default class Game {
             this.step();
         }, 10);
     };
+
+
+    // postGame() {
+    //     canvas.addEventListener("click", (event) => {
+    //     });
+    // };
 };
