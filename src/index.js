@@ -5,6 +5,12 @@ import Path from "./scripts/path";
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const g = new Game()
-    g.animate(ctx)
-})
+    const g = new Game();
+    g.animate(ctx);
+});
+
+window.addEventListener("keydown", (event) => {
+    if ((event.code === "ArrowUp") || (event.code === "ArrowDown") || (event.code === "ArrowLeft") || (event.code === "ArrowRight") || (event.code === "Space")) {
+        event.preventDefault();
+    };
+});

@@ -1,12 +1,12 @@
+/*!****************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./src/styles/reset.css ***!
+  \****************************************************************************************************/
 
-h1 {
-    color: black;
-    text-align: center;
-
-}
+/*!****************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./src/styles/style.css ***!
+  \****************************************************************************************************/
 
 body {
-    background-color: lightgray;
     color: black;
     display: flex;
     flex-direction: column;
@@ -14,12 +14,39 @@ body {
     justify-content: center;
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
+    position: relative;
+}
+
+h1 {
+    color: black;
+    text-align: center;
+    z-index: 10;
+}
+
+#navbar {
+    z-index: 10;
+}
+
+#scorebox {
+    z-index: 10;
+}
+
+#background {
+    height: 120vh;
+    width: 100vw;
+    position: absolute;
+
 }
 
 #canvas {
     background: white;
-    border-radius: 5px;
+    border: 5px solid black;
+    display: float;
+    z-index: 10;
+    opacity: 0.8;
+    margin: 10px;
 }
+/*!*************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/sass-loader/dist/cjs.js!./src/index.scss ***!
+  \*************************************************************************************************************************************/
 
-
-/*# sourceMappingURL=main.css.map*/
