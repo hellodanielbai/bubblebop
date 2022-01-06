@@ -1,6 +1,4 @@
-
 body {
-    color: black;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,12 +9,22 @@ body {
 }
 
 h1 {
-    color: black;
+    font-size: 20;
+    color: rgb(109, 3, 109);
     text-align: center;
     z-index: 10;
 }
 
+li {
+    list-style: none;
+    align-items: center;
+}
+
 #navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     z-index: 10;
 }
 
@@ -28,12 +36,11 @@ h1 {
     height: 120vh;
     width: 100vw;
     position: absolute;
-
 }
 
 #canvas {
     background: white;
-    border: 5px solid black;
+    border: 5px solid darkslateblue;
     display: float;
     z-index: 10;
     opacity: 0.8;

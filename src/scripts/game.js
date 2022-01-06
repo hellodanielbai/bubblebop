@@ -186,7 +186,7 @@ export default class Game {
         ctx.fillStyle = this.GCOLOR;
         ctx.fillRect(0, 0, this.GDIM_X, this.GDIM_Y);
         canvas.addEventListener("click", (event) => {
-            const newPath = new Path({x: event.offsetX, y: event.offsetY, width: 48, height: 48, color: "gray"})
+            const newPath = new Path({x: event.offsetX, y: event.offsetY, width: 48, height: 48, color: "purple"})
             this.addPath(newPath)
             if (this.paths.length > 4) {
                 this.paths.pop();
@@ -197,10 +197,8 @@ export default class Game {
         });
         ctx.fillStyle = "black"
         if (this.gameOver) {
-            ctx.font = '40px serif'
-            ctx.fillText('AWW :(', 220, 330)
             ctx.font = '80px serif';
-            ctx.fillText('YOU LOSE', 200, 400)
+            ctx.fillText('YOU LOSE', 200, 400);
         } 
     };
 
