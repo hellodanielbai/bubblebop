@@ -28,7 +28,7 @@ export default class Game {
         this.planes = [];
 
         this.paths = [];
-        this.pathLife = 200;
+        this.pathLife = 0;
     };
 
     //Add Objects
@@ -87,7 +87,12 @@ export default class Game {
     };
 
     removePath() {
-        this.paths.pop();
+        if (this.pathLife === 240) {
+            this.paths.pop();
+            this.pathLife = 0
+        } else {
+            this.pathLife++;
+        };
     };
 
     //Collision//
@@ -184,7 +189,7 @@ export default class Game {
             const newPath = new Path({x: event.offsetX, y: event.offsetY, width: 48, height: 48, color: "gray"})
             this.addPath(newPath)
             if (this.paths.length > 4) {
-                this.removePath();
+                this.paths.pop();
             };
         });
         this.allObjects().forEach(object => {
@@ -207,12 +212,7 @@ export default class Game {
 
     step() {
         this.addPlane()
-        if (this.pathLife === 0) {
-            this.removePath()
-            this.pathLife = 200
-        } else {
-            this.pathLife--;
-        };
+        this.removePath()
         this.move();
         this.planes.forEach((plane) => {
             plane.detectBorder();
