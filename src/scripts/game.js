@@ -197,8 +197,8 @@ export default class Game {
         });
         ctx.fillStyle = "black"
         if (this.gameOver) {
-            ctx.font = '80px serif';
-            ctx.fillText('YOU LOSE', 200, 400);
+            ctx.font = '80px impact';
+            ctx.fillText('GAMEOVER', 220, 360);
         } 
     };
 
