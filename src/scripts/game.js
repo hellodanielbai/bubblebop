@@ -13,7 +13,6 @@ export default class Game {
         this.score = 0;
         this.gameOver = false;
         this.counter = 0;
-        this.incrementer = 0;
         this.cursorPosArr = [];    
 
         this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red"});
@@ -29,7 +28,7 @@ export default class Game {
         this.planes = [];
 
         this.paths = [];
-        this.pathLife = 320;
+        this.pathLife = 200;
     };
 
     //Add Objects
@@ -67,8 +66,7 @@ export default class Game {
         if (this.counter === 0) {
             this.planes.push(this.planesQueue.shift());
             this.addRandomPlaneToQueue();
-            this.counter = 500 - this.incrementer;
-            // if (this.incrementer < 200) this.incrementer += 2;
+            this.counter = 500 - (this.score * 3);
         } else {
             this.counter--;
         };  
@@ -140,14 +138,24 @@ export default class Game {
 
     checkPlaneLand(plane) {
         let relevantTerminal;
+        let relevantTerminal2
         if (plane.color === "red") {
             relevantTerminal = this.redTerminal;
+            relevantTerminal2 = this.redTerminal2;
         } else if (plane.color === "green") {
             relevantTerminal = this.greenTerminal;
+            relevantTerminal2 = this.greenTerminal2;
         } else if (plane.color === "blue") {
             relevantTerminal = this.blueTerminal;
+            relevantTerminal2 = this.blueTerminal2;
         };
         if (this.collisionBetween(plane, relevantTerminal)) {
+            this.removePlane(plane);
+            this.score ++;
+            let scoremarker = document.getElementById("scoremarker");
+            scoremarker.innerHTML = `Score: ${this.score}`;
+        };
+        if (this.collisionBetween(plane, relevantTerminal2)) {
             this.removePlane(plane);
             this.score ++;
             let scoremarker = document.getElementById("scoremarker");
@@ -185,9 +193,9 @@ export default class Game {
         ctx.fillStyle = "black"
         if (this.gameOver) {
             ctx.font = '40px serif'
-            ctx.fillText('AWW', 220, 330)
+            ctx.fillText('AWW :(', 220, 330)
             ctx.font = '80px serif';
-            ctx.fillText('YOU LOSE :(', 200, 400)
+            ctx.fillText('YOU LOSE', 200, 400)
         } 
     };
 
@@ -201,7 +209,7 @@ export default class Game {
         this.addPlane()
         if (this.pathLife === 0) {
             this.removePath()
-            this.pathLife = 300
+            this.pathLife = 200
         } else {
             this.pathLife--;
         };
@@ -222,6 +230,6 @@ export default class Game {
             };
             this.draw(ctx);
             this.step();
-        }, 12);
+        }, 10);
     };
 } ;
