@@ -120,11 +120,15 @@ export default class Game {
         for(let i = 0; i < this.paths.length; i++) {
             let currPath = this.paths[i]
             if (this.collisionBetween(plane, currPath)) {
-                plane.dx *= -1
-                plane.dy *= -1
+                if (plane.x > currPath.x || plane.x < currPath.x) {
+                    plane.dy += 1
+                } else if (plane.y > currPath.y || (plane.y < currPath.y)) {
+                    plane.dx -= 1
+                }
             }
         };
     };
+
 
     checkPlaneLand(plane) {
         let relevantTerminal;
@@ -181,7 +185,7 @@ export default class Game {
         this.addPlane()
         if (this.pathLife === 0) {
             this.removePath()
-            this.pathLife = 600
+            this.pathLife = 300
         } else {
             this.pathLife--;
         };
@@ -190,7 +194,7 @@ export default class Game {
             plane.detectBorder();
             this.checkPlaneLand(plane);
             this.planeReRoute(plane);
-            // this.checkPlaneCrash(plane);
+            this.checkPlaneCrash(plane);
         });
     };
 
@@ -201,6 +205,6 @@ export default class Game {
             };
             this.draw(ctx);
             this.step();
-        }, 10);
+        }, 16);
     };
 } ;
