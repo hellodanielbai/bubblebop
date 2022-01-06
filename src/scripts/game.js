@@ -20,38 +20,45 @@ export default class Game {
         this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue"});
         this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green"});
 
-        this.redPlane = new Plane({x: 30, y: 30, dx: 0.5, dy: 1.5, radius: 30, color: "red"});
+        this.redTerminal2 = new Terminal({x: 20, y: 780, width: 240, height: 20, color: "red"});
+        this.blueTerminal2 = new Terminal({x: 280, y: 780, width: 240, height: 20, color: "blue"});
+        this.greenTerminal2 =  new Terminal({x: 540, y: 780, width: 240, height: 20, color: "green"});
+
+        this.redPlane = new Plane({x: 30, y: 30, dx: 0.3, dy: 0.7, radius: 24, color: "red"});
         this.planesQueue = [this.redPlane];
         this.planes = [];
 
         this.paths = [];
-        this.pathLife = 500;
+        this.pathLife = 320;
     };
 
     //Add Objects
     allObjects() {
-        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.planes, this.paths);
+        return [].concat(this.redTerminal, this.blueTerminal, this.greenTerminal, this.redTerminal2, this.blueTerminal2, this.greenTerminal2, this.planes, this.paths);
     };
 
     addRandomPlaneToQueue() {
-        let redSpeed = 2;
-        let blueSpeed = 3;
-        let greenSpeed = 4;
+        const redSpeed = 1;
+        const blueSpeed = 2;
+        const greenSpeed = 3;
+        let randNum = Math.random()
+        if (randNum < 0.1) randNum += 0.1
+        if (randNum > 0.9) randNum -= 0.1
         let randColor = Math.floor(Math.random() * 3);
         if (randColor === 0) {
-            const randDX = (Math.random() * redSpeed) + 0.01;
+            const randDX = (randNum * redSpeed);
             const randDY = redSpeed - randDX;
-            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 30, color: "red"});
+            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 24, color: "red"});
             this.planesQueue.push(randomPlane);
         } else if (randColor === 1) {
-            const randDX = (Math.random() * blueSpeed) + 0.01;
+            const randDX = (randNum * blueSpeed);
             const randDY = blueSpeed - randDX;
-            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 20, color: "blue"});
+            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 16, color: "blue"});
             this.planesQueue.push(randomPlane);
         } else {
-            const randDX = (Math.random() * greenSpeed) + 0.01;
+            const randDX = (randNum * greenSpeed);
             const randDY = greenSpeed - randDX;
-            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 10, color: "green"});
+            const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 12, color: "green"});
             this.planesQueue.push(randomPlane);
         };
     };
@@ -60,7 +67,7 @@ export default class Game {
         if (this.counter === 0) {
             this.planes.push(this.planesQueue.shift());
             this.addRandomPlaneToQueue();
-            this.counter = 400 - this.incrementer;
+            this.counter = 500 - this.incrementer;
             // if (this.incrementer < 200) this.incrementer += 2;
         } else {
             this.counter--;
@@ -166,7 +173,7 @@ export default class Game {
         ctx.fillStyle = this.GCOLOR;
         ctx.fillRect(0, 0, this.GDIM_X, this.GDIM_Y);
         canvas.addEventListener("click", (event) => {
-            const newPath = new Path({x: event.offsetX, y: event.offsetY, width: 40, height: 40, color: "gray"})
+            const newPath = new Path({x: event.offsetX, y: event.offsetY, width: 48, height: 48, color: "gray"})
             this.addPath(newPath)
             if (this.paths.length > 4) {
                 this.removePath();
