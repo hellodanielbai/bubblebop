@@ -25,7 +25,7 @@ export default class Game {
         this.planes = [];
 
         this.paths = [];
-        this.pathLife = 300;
+        this.pathLife = 500;
     };
 
     //Add Objects
@@ -36,20 +36,20 @@ export default class Game {
     addRandomPlaneToQueue() {
         let redSpeed = 2;
         let blueSpeed = 3;
-        let greenSpeed = 5;
+        let greenSpeed = 4;
         let randColor = Math.floor(Math.random() * 3);
         if (randColor === 0) {
-            const randDX = Math.random() * redSpeed;
+            const randDX = (Math.random() * redSpeed) + 0.01;
             const randDY = redSpeed - randDX;
             const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 30, color: "red"});
             this.planesQueue.push(randomPlane);
         } else if (randColor === 1) {
-            const randDX = Math.random() * blueSpeed;
+            const randDX = (Math.random() * blueSpeed) + 0.01;
             const randDY = blueSpeed - randDX;
             const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 20, color: "blue"});
             this.planesQueue.push(randomPlane);
         } else {
-            const randDX = Math.random() * greenSpeed;
+            const randDX = (Math.random() * greenSpeed) + 0.01;
             const randDY = greenSpeed - randDX;
             const randomPlane = new Plane({x: 40, y: 40, dx: randDX, dy: randDY, radius: 10, color: "green"});
             this.planesQueue.push(randomPlane);
@@ -120,10 +120,11 @@ export default class Game {
         for(let i = 0; i < this.paths.length; i++) {
             let currPath = this.paths[i]
             if (this.collisionBetween(plane, currPath)) {
-                if (plane.x > currPath.x || plane.x < currPath.x) {
-                    plane.dy *=  -1
-                } else if (plane.y > currPath.y || (plane.y < currPath.y)) {
-                    plane.dx *= -1
+                if ((plane.x < currPath.x && plane.dx > 0) || (plane.x > currPath.x && plane.dx < 0)) {
+                    plane.dx *=  -1
+                } 
+                if ((plane.y < currPath.y && plane.dy > 0) || (plane.y> currPath.y && plane.dy < 0)) {
+                    plane.dy *= -1
                 }
             }
         };
@@ -146,6 +147,7 @@ export default class Game {
             scoremarker.innerHTML = `Score: ${this.score}`;
         };
     };
+
 
     checkPlaneCrash(plane) {
         for (let i = 1; i < this.planes.length; i++) {
@@ -173,6 +175,13 @@ export default class Game {
         this.allObjects().forEach(object => {
             object.draw(ctx);
         });
+        ctx.fillStyle = "black"
+        if (this.gameOver) {
+            ctx.font = '40px serif'
+            ctx.fillText('AWW', 220, 330)
+            ctx.font = '80px serif';
+            ctx.fillText('YOU LOSE :(', 200, 400)
+        } 
     };
 
     move() {
@@ -202,6 +211,7 @@ export default class Game {
         let drawInterval = setInterval(() => {
             if (this.gameOver) {
                 clearInterval(drawInterval)
+                this.draw(ctx)
             };
             this.draw(ctx);
             this.step();
