@@ -14,21 +14,16 @@ export default class Game {
         this.gameOver = false;
         this.counter = 0;
         this.cursorPosArr = [];    
-
         this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red"});
         this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue"});
         this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green"});
-
         this.redTerminal2 = new Terminal({x: 20, y: 780, width: 240, height: 20, color: "red"});
         this.blueTerminal2 = new Terminal({x: 280, y: 780, width: 240, height: 20, color: "blue"});
         this.greenTerminal2 =  new Terminal({x: 540, y: 780, width: 240, height: 20, color: "green"});
-
         this.redPlane = new Plane({x: 30, y: 30, dx: 0.3, dy: 0.7, radius: 24, color: "red"});
         this.planesQueue = [this.redPlane];
         this.planes = [];
-
         this.paths = [];
-        this.pathLife = 0;
     };
 
     //Add Objects
@@ -79,19 +74,19 @@ export default class Game {
     addPath(newPath) {
         if (this.planes.every(plane => !this.collisionBetween(plane, newPath))) {
             if (this.paths.length === 0) {
-                this.paths.unshift(newPath)
+                this.paths.unshift(newPath);
             } else if (newPath.x != this.paths[0].x && newPath.y != this.paths[0].y){
                 this.paths.unshift(newPath);
             };
-        }
+        };
     };
 
     removePath() {
-        if (this.pathLife === 240) {
-            this.paths.pop();
-            this.pathLife = 0
-        } else {
-            this.pathLife++;
+        for(let i = 0; i < this.paths.length; i++) {
+            this.paths[i].life--;
+            if (this.paths[i].life <= 0) {
+                this.paths.splice(i, 1);
+            } ;
         };
     };
 
@@ -100,20 +95,20 @@ export default class Game {
         if (object2 instanceof Terminal) {
             var distX = Math.abs(object1.x - object2.x - object2.width/2);
             var distY = Math.abs(object1.y - object2.y - object2.height/2);
-            if (distX > (object2.width/2 + object1.radius)) { return false; }
-            if (distY > (object2.height/2 + object1.radius)) { return false; }
-            if (distX <= (object2.width/2)) { return true; } 
-            if (distY <= (object2.height/2)) { return true; }
+            if (distX > (object2.width/2 + object1.radius)) { return false; };
+            if (distY > (object2.height/2 + object1.radius)) { return false; };
+            if (distX <= (object2.width/2)) { return true; };
+            if (distY <= (object2.height/2)) { return true;};
             var objdx = distX - object2.width/2;
             var objdy = distY - object2.height/2;
             return (objdx * objdx + objdy * objdy <= (object1.radius * object1.radius));
         } else if (object2 instanceof Path) {
             var distX = Math.abs(object1.x - object2.x - object2.width/2);
             var distY = Math.abs(object1.y - object2.y - object2.height/2);
-            if (distX > (object2.width/2 + object1.radius)) { return false; }
-            if (distY > (object2.height/2 + object1.radius)) { return false; }
-            if (distX <= (object2.width/2)) { return true; } 
-            if (distY <= (object2.height/2)) { return true; }
+            if (distX > (object2.width/2 + object1.radius)) { return false; };
+            if (distY > (object2.height/2 + object1.radius)) { return false; };
+            if (distX <= (object2.width/2)) { return true; };
+            if (distY <= (object2.height/2)) { return true; };
             var objdx = distX - object2.width/2;
             var objdy = distY - object2.height/2;
             return (objdx * objdx + objdy * objdy <= (object1.radius * object1.radius));
@@ -128,22 +123,22 @@ export default class Game {
 
     planeReRoute(plane) {
         for(let i = 0; i < this.paths.length; i++) {
-            let currPath = this.paths[i]
+            let currPath = this.paths[i];
             if (this.collisionBetween(plane, currPath)) {
                 if ((plane.x < currPath.x && plane.dx > 0) || (plane.x > currPath.x && plane.dx < 0)) {
-                    plane.dx *=  -1
+                    plane.dx *= -1;
                 } 
                 if ((plane.y < currPath.y && plane.dy > 0) || (plane.y> currPath.y && plane.dy < 0)) {
-                    plane.dy *= -1
-                }
-            }
+                    plane.dy *= -1;
+                };
+            };
         };
     };
 
 
     checkPlaneLand(plane) {
         let relevantTerminal;
-        let relevantTerminal2
+        let relevantTerminal2;
         if (plane.color === "red") {
             relevantTerminal = this.redTerminal;
             relevantTerminal2 = this.redTerminal2;
@@ -186,8 +181,8 @@ export default class Game {
         ctx.fillStyle = this.GCOLOR;
         ctx.fillRect(0, 0, this.GDIM_X, this.GDIM_Y);
         canvas.addEventListener("click", (event) => {
-            const newPath = new Path({x: event.offsetX, y: event.offsetY, width: 48, height: 48, color: "purple"})
-            this.addPath(newPath)
+            const newPath = new Path({x: event.offsetX, y: event.offsetY, width: 42, height: 42, color: "purple"});
+            this.addPath(newPath);
             if (this.paths.length > 4) {
                 this.paths.pop();
             };
@@ -195,7 +190,7 @@ export default class Game {
         this.allObjects().forEach(object => {
             object.draw(ctx);
         });
-        ctx.fillStyle = "black"
+        ctx.fillStyle = "black";
         if (this.gameOver) {
             ctx.font = '80px impact';
             ctx.fillText('GAMEOVER', 220, 360);
@@ -209,8 +204,8 @@ export default class Game {
     };
 
     step() {
-        this.addPlane()
-        this.removePath()
+        this.addPlane();
+        this.removePath();
         this.move();
         this.planes.forEach((plane) => {
             plane.detectBorder();
@@ -224,10 +219,10 @@ export default class Game {
         let drawInterval = setInterval(() => {
             if (this.gameOver) {
                 clearInterval(drawInterval)
-                this.draw(ctx)
+                this.draw(ctx);
             };
             this.draw(ctx);
             this.step();
         }, 10);
     };
-} ;
+};

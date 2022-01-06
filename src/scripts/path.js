@@ -5,6 +5,7 @@ export default class Path {
         this.width = options["width"];
         this.height = options["height"];
         this.color = options["color"];
+        this.life = 240
     }
 
     draw(ctx) {
