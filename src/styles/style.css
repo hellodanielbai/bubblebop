@@ -27,6 +27,7 @@ li {
     display: flex;
     justify-content: space-evenly;
     width: 20%;
+    max-height: 20px;
     align-items: center;
     z-index: 10;
 
@@ -99,4 +100,11 @@ li {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+#github-logo,
+#linkedin-logo {
+    max-width: 4rem;
+    max-height: 4rem;
+    border: none;
 }
