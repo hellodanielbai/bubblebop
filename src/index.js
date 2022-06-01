@@ -7,12 +7,15 @@ const games = []
 
 document.addEventListener("DOMContentLoaded", () => {
     const g = new Game();
-    games.push(g)
-    g.animate(ctx);
+    g.start(ctx)
+    // games.push(g)
+    // g.animate(ctx);
 });
 
-window.addEventListener("keydown", (event) => {
-    if ((event.code === "ArrowUp") || (event.code === "ArrowDown") || (event.code === "ArrowLeft") || (event.code === "ArrowRight") || (event.code === "Space")) {
-        event.preventDefault();
-    };
-});
+// canvas.addEventListener('click', () => {
+//     if (games.length === 0) {
+//         const newGame = new Game();
+//         games.push(newGame);
+//         newGame.start();
+//     };
+// })
