@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 import Game from "./scripts/game"
 import Path from "./scripts/path";
 
-const games = []
+// const games = []
 
 document.addEventListener("DOMContentLoaded", () => {
     const g = new Game();

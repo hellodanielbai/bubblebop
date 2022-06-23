@@ -195,7 +195,7 @@ export default class Game {
         });
         ctx.fillStyle = "black";
         if (this.gameOver) {
-            ctx.font = '80px impact';
+            ctx.font = '60px impact';
             ctx.fillText('GAMEOVER', 220, 360);
         };
     };
@@ -231,8 +231,10 @@ export default class Game {
     };
 
     start(ctx) {
-        ctx.font = '20px impact';
-        ctx.fillText('Click SpaceBar to Start Game', 220, 360);
+        ctx.font = '30px impact';
+        ctx.fillText('Direct Bubbles to their Respective Colored Goals', 90, 200);
+        ctx.fillText('By Clicking on Board to Create Purple Square Walls', 75, 250);
+        ctx.fillText('Click SpaceBar to Begin', 230, 400);
         window.addEventListener("keydown", (event) => {
             if (event.code === "Space") {
                 if (this.gameStarted === false) {
@@ -243,36 +245,36 @@ export default class Game {
         })
     }
 
-    restart(ctx) {
-        this.GDIM_X = 800;
-        this.GDIM_Y = 800;
-        this.GCOLOR =  "pink";
-        this.GFPS = 30;
-        this.score = 0;
-        this.gameOver = false;
-        this.gameStarted = false;
-        this.counter = 0;
-        this.cursorPosArr = [];    
-        this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red"});
-        this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue"});
-        this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green"});
-        this.redTerminal2 = new Terminal({x: 20, y: 780, width: 240, height: 20, color: "red"});
-        this.blueTerminal2 = new Terminal({x: 280, y: 780, width: 240, height: 20, color: "blue"});
-        this.greenTerminal2 =  new Terminal({x: 540, y: 780, width: 240, height: 20, color: "green"});
-        this.redPlane = new Plane({x: 30, y: 30, dx: 0.3, dy: 0.7, radius: 24, color: "red"});
-        this.planesQueue = [this.redPlane];
-        this.planes = [];
-        this.paths = [];
+    // restart(ctx) {
+    //     this.GDIM_X = 800;
+    //     this.GDIM_Y = 800;
+    //     this.GCOLOR =  "pink";
+    //     this.GFPS = 30;
+    //     this.score = 0;
+    //     this.gameOver = false;
+    //     this.gameStarted = false;
+    //     this.counter = 0;
+    //     this.cursorPosArr = [];    
+    //     this.redTerminal = new Terminal({x: 780, y: 20, width: 20, height: 240, color: "red"});
+    //     this.blueTerminal = new Terminal({x: 780, y: 280, width: 20, height: 240, color: "blue"});
+    //     this.greenTerminal =  new Terminal({x: 780, y: 540, width: 20, height: 240, color: "green"});
+    //     this.redTerminal2 = new Terminal({x: 20, y: 780, width: 240, height: 20, color: "red"});
+    //     this.blueTerminal2 = new Terminal({x: 280, y: 780, width: 240, height: 20, color: "blue"});
+    //     this.greenTerminal2 =  new Terminal({x: 540, y: 780, width: 240, height: 20, color: "green"});
+    //     this.redPlane = new Plane({x: 30, y: 30, dx: 0.3, dy: 0.7, radius: 24, color: "red"});
+    //     this.planesQueue = [this.redPlane];
+    //     this.planes = [];
+    //     this.paths = [];
         
 
-        window.addEventListener("keydown", (event) => {
-            if (event.code === "Space") {
-                if (this.gameStarted === false) {
-                    this.gameStarted = true
-                    this.animate(ctx)
-                }
-            }
-        })
-    }
+    //     window.addEventListener("keydown", (event) => {
+    //         if (event.code === "Space") {
+    //             if (this.gameStarted === false) {
+    //                 this.gameStarted = true
+    //                 this.animate(ctx)
+    //             }
+    //         }
+    //     })
+    // }
 
 };
